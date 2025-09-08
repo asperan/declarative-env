@@ -1,0 +1,27 @@
+# Basic structure:
+# <variable_name>:
+#   type: <any-rust-simple-type (e.g. iXX, uXX, String)
+#   description: <The documentation text>
+#   [default: <default-value>]
+# If default is not present, then it is a required value
+
+SERVER_PORT: {
+  type: u16
+  description: Lorem ipsum
+  default: 8080
+}
+LOG_LEVEL: {
+  type: String
+  description: Lorem ipsum
+  default: info
+}
+REQUIRED_VALUE: {
+  type: i32
+  description: A required value
+}
+
+EMPTY_VALUE: {
+    type: String
+    description: Empty Value
+    default: ""
+}

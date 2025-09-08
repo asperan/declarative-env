@@ -1,0 +1,15 @@
+[package]
+name = "declarative-env"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+deser-hjson = "2.2.4"
+hierrorchy = "0.2.0"
+proc-macro2 = { version = "1.0.101", features = ["proc-macro", "span-locations"] }
+quote = "1.0.40"
+serde = "1.0.219"
+syn = "2.0.106"
