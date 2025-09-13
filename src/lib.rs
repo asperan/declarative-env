@@ -6,8 +6,8 @@
 //!
 //! # Usage
 //! The macro must be attached to an empty struct definition:
-//! ```no_run
-//!    #[declarative_env!(path = "./example.hjson", format = "hjson")]
+//! ```ignore
+//!    #[declarative_env(path = "./example.hjson", format = "hjson")]
 //!    struct MyConfig;
 //! ```
 //! > Note: the struct can have any visibility.
