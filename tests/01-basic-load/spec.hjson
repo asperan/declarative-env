@@ -1,0 +1,5 @@
+TEST_VAR: {
+    type: u16
+    description: a test var
+    default: 0
+}

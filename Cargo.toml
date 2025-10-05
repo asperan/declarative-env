@@ -16,3 +16,8 @@ proc-macro2 = { version = "1.0.101", features = ["proc-macro", "span-locations"]
 quote = "1.0.40"
 serde = "1.0.219"
 syn = "2.0.106"
+
+[dev-dependencies]
+hierrorchy = "0.2.0"
+string_sequence_tester = "0.1.0"
+temp-env = "0.3.6"

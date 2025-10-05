@@ -1,46 +1,36 @@
-use declarative_env::declarative_env;
+use std::str::Utf8Error;
+use std::{error::Error, process::Command};
+use std::io::Error as IoError;
 
-#[declarative_env(path = "./tests/example.hjson")]
-struct ConfigOne;
+use hierrorchy::{error_leaf, error_node};
+use string_sequence_tester::{Line, Sequence, SequenceTree};
 
-#[declarative_env(path = "./tests/example.hjson", format = "hjson")]
-struct ConfigTwo;
+error_node! {
+    type TestExpansionError<CommandExecutionError, IoError, Utf8Error> = "expansion test failed"
+}
 
-/*
-* #[derive(Debug, Clone)]
-* pub struct ConfigWithPath {
-*    LOG_LEVEL: String,
-*    SERVER_PORT: u16,
-*    EMPTY_VALUE: String,
-*    REQUIRED_VALUE: i32,
-* }
-*
-* impl ConfigWithPath {
-*    pub fn from_env() -> Result<Self, Box<dyn Error>> {
-*        // TODO: read env variable
-*        // if present, use the value,
-*        // if not present, use default value (try to parse it before inserting it plain)
-*    }
-*
-*    pub fn LOG_LEVEL(&self) -> &str {
-*        &self.LOG_LEVEL
-*    }
-*
-*    pub fn SERVER_PORT(&self) -> u16 {
-*        self.SERVER_PORT
-*    }
-*
-*    pub fn EMPTY_VALUE(&self) -> &str {
-*        &self.EMPTY_VALUE
-*    }
-*
-*    pub fn REQUIRED_VALUE(&self) -> i32 {
-*        self.REQUIRED_VALUE
-*    }
-* }
-*/
+#[error_leaf(format!("command execution failed: {}", self.stderr))]
+struct CommandExecutionError {
+    stderr: String,
+}
+
+fn check_expansion(test: &str, sequence: SequenceTree) -> Result<(), TestExpansionError> {
+    let output = Command::new("cargo").arg("expand").arg("--test").arg(test).output()?;
+    if output.status.success() {
+        let stdout = std::str::from_utf8(&output.stdout)?;
+        let expanded_lines: Vec<String> = stdout.lines().map(|it| it.trim().to_owned()).collect();
+        if sequence.accept(&expanded_lines) {
+            return Ok(());
+        } else {
+            panic!("sequence not found");
+        }
+    } else {
+        let stderr = std::str::from_utf8(&output.stderr)?;
+        return Err(CommandExecutionError { stderr: stderr.to_owned() }.into())
+    }
+}
 
 #[test]
-fn test_config_load() {
-    todo!();
+fn test_config_load() -> Result<(), TestExpansionError> {
+    check_expansion("01-basic-load", SequenceTree::Sequence(Sequence::new(vec![Line::trimmed("struct MyConfig {"), Line::trimmed("TEST_VAR: u16,"), Line::trimmed("}")])))
 }
