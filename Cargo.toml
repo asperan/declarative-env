@@ -1,6 +1,6 @@
 [package]
 name = "declarative-env"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "This crate parses and populates a struct with the environmental variables defined in a file, for having the documentation and the code always synchronized."
 license = "MPL-2.0"
