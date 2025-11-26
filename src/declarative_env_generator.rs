@@ -92,7 +92,7 @@ impl DeclarativeEnvGenerator {
             let fn_return_type = it.rust_type().to_struct_return_type();
             let self_ref = it.rust_type().to_struct_self_caller();
             functions.extend(quote! {
-                fn #fn_name(&self) -> #fn_return_type {
+                pub fn #fn_name(&self) -> #fn_return_type {
                     #self_ref.#fn_name
                 }
             });
